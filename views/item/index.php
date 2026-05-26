@@ -1,5 +1,7 @@
 <?php
-require_once '../../controllers/category.php';
+// 1. Include the correct controllers
+require_once '../../controllers/item.php';
+require_once '../../controllers/category.php'; 
 require_once '../../public/database.config.php';
 
 $host     = getenv('SERVER_NAME') ?: ($_ENV['SERVER_NAME'] ?? 'mysql.railway.internal');
@@ -14,8 +16,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// THE MISSING LINK: Instantiate the controller so the page can use it!
+// 2. Initialize BOTH controllers
 $controller = new ItemController($host, $user, $pass, $dbname, $db_port);
+$catController = new CategoryController($host, $user, $pass, $dbname, $db_port);
 
 $searchTerm = $_GET['search'] ?? '';
 $categoryFilter = $_GET['category'] ?? '';
@@ -24,32 +27,27 @@ $categoryFilter = $_GET['category'] ?? '';
 $message = "";
 $messageType = "";
 
-// Process delete action
+// Process delete action (for items)
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $id = intval($_GET['delete']);
-    if ($controller->delete($id)) {
-        $message = "Category deleted successfully";
+    if ($controller->delete(intval($_GET['delete']))) {
+        $message = "Item deleted successfully";
         $messageType = "success";
     } else {
-        $message = "Cannot delete category - it may have items associated with it";
+        $message = "Failed to delete item";
         $messageType = "danger";
     }
 }
 
-// Process seeding action (for initial setup)
+// Process seeding action
 if (isset($_GET['seed'])) {
-    $seeded = $controller->seedInitialCategories();
-    if ($seeded > 0) {
-        $message = "Seeded $seeded initial categories";
-        $messageType = "success";
-    } else {
-        $message = "No new categories to seed (all already exist)";
-        $messageType = "info";
-    }
+    $seeded = $controller->seedInitialItems();
+    $message = $seeded > 0 ? "Seeded $seeded items" : "No new items to seed";
+    $messageType = "info";
 }
 
-// Get all categories for display
-$categories = $controller->readAll();
+// Get all items and categories for display
+$items = $controller->readAll($searchTerm, $categoryFilter);
+$categories = $catController->readAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
