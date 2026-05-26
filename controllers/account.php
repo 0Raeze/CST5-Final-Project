@@ -6,7 +6,7 @@ class AccountController {
     // Properties
     private $conn;
 
-    function __construct($server_name, $username, $password, $db_name)
+    function __construct($server_name, $username, $password, $db_name, $db_port)
     {
         $this->conn = new mysqli(
             $server_name,

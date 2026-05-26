@@ -13,6 +13,7 @@ $SERVER_NAME = getenv('SERVER_NAME') ?: ($_ENV['SERVER_NAME'] ?? 'localhost');
 $USERNAME    = getenv('USERNAME') ?: ($_ENV['USERNAME'] ?? 'root');
 $PASSWORD    = getenv('PASSWORD') ?: ($_ENV['PASSWORD'] ?? '');
 $DB_NAME     = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'railway');
+$DB_PORT     = getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? '3306');
 
 // Dummy credentials (replace with database later)
 $valid_user = "admin";
@@ -26,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])) {
     $password = $_POST["password"] ?? "";
 
     $credentials = new Account($username, $password);
-    $controller = new AccountController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+    $controller = new AccountController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME, $DB_PORT);
 
     $result = $controller->login(
         $credentials->username,
