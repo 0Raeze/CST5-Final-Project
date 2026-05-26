@@ -15,7 +15,10 @@ if ($conn->connect_error) {
 }
 
 // THE MISSING LINK: Instantiate the controller so the page can use it!
-$controller = new CategoryController($host, $user, $pass, $dbname, $db_port);
+$controller = new ItemController($host, $user, $pass, $dbname, $db_port);
+
+$searchTerm = $_GET['search'] ?? '';
+$categoryFilter = $_GET['category'] ?? '';
 
 // Handle form submissions
 $message = "";

@@ -14,6 +14,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$controller = new CategoryController($host, $user, $pass, $dbname, $db_port);
+
 // Determine if we are editing or adding
 $isEdit = false;
 $category = null;

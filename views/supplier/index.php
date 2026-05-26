@@ -14,6 +14,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$controller = new SupplierController($host, $user, $pass, $dbname, $db_port);
+
 // Handle form submissions
 $message = "";
 $messageType = "";

@@ -7,13 +7,15 @@ class ItemController {
     // Properties
     private $conn;
 
-    function __construct($server_name, $username, $password, $db_name)
+    function __construct($server_name, $username, $password, $db_name, $db_port = 3306)
     {
+        // Add the port to the mysqli constructor
         $this->conn = new mysqli(
             $server_name,
             $username,
             $password,
-            $db_name
+            $db_name,
+            $db_port
         );
 
         // Check connection

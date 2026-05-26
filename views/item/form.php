@@ -8,6 +8,7 @@ require_once '../../public/database.config.php';
 $itemController = new ItemController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
 $categoryController = new CategoryController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
 $supplierController = new SupplierController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+$controller = new ItemController($host, $user, $pass, $dbname, $db_port);
 
 // Determine if we are editing or adding
 $isEdit = false;
