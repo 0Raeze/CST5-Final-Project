@@ -82,8 +82,8 @@ $items = $itemController->readAll($searchTerm, $categoryFilter);
         <h2 class="font-pixel mb-4">Item Inventory</h2>
 
         <!-- Search and Filter Bar -->
-        <div class="row mb-4">
-            <div class="col-md-4">
+        <div class="row g-3 my-3">
+            <div class="col-md-3">
                 <div class="input-group">
                     <input type="text" class="form-control font-body" placeholder="Search by name or SKU..."
                            name="search" value="<?= htmlspecialchars($searchTerm) ?>" id="searchInput">
@@ -102,20 +102,15 @@ $items = $itemController->readAll($searchTerm, $categoryFilter);
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button class="btn btn-outline-primary w-100" id="applyFilters">
                     <span class="nes-btn is-small">Apply Filters</span>
                 </button>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <a href="index.php" class="btn btn-outline-secondary w-100">
                     <span class="nes-btn is-small">Reset</span>
-                </button>
-            </div>
-            <div class="col-md-1">
-                <a href="form.php" class="btn btn-success w-100">
-                    <span class="nes-btn is-small">+ Add</span>
-                </button>
+                </a>
             </div>
         </div>
 

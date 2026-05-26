@@ -18,38 +18,47 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/views/dashboard/index.php">
-                <img src="/public/sprites/icons/stardew_logo.png" alt="Stardew Valley Logo" style="image-rendering: pixelated; height: 32px; margin-right: 8px;">
-                <span class="font-pixel">Stardew Valley Inventory</span>
+                <img src="/assets/images/logo.png" alt="Stardew Valley Ledger" height="40">
+                <span class="font-pixel ms-2">Stardew Valley Inventory</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active font-body" aria-current="page" href="/views/dashboard/index.php">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link font-body" href="/views/category/index.php">Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link font-body" href="/views/supplier/index.php">Suppliers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link font-body" href="/views/item/index.php">Items</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link font-body" href="/views/about.php">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link font-body" href="/views/reports.php">Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link font-body" href="/views/settings.php">Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link font-body" href="/logout.php">Logout</a>
-                    </li>
+                    <?php if (isset($_SESSION["user_id"])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link active font-body" aria-current="page" href="/views/dashboard/index.php">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/views/category/index.php">Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/views/supplier/index.php">Suppliers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/views/item/index.php">Items</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/views/about.php">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/views/reports.php">Reports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/views/settings.php">Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/logout.php">Logout</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/login.php">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-body" href="/register.php">Register</a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

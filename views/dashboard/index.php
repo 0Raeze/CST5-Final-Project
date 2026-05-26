@@ -6,6 +6,47 @@ if (!isset($_SESSION["user_id"])) {
     header("Location: /index.php");
     exit();
 }
+
+// Get dashboard stats
+require_once '../../public/database.config.php';
+$conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Get counts for dashboard stats
+$categoryResult = $conn->query("SELECT COUNT(*) as count FROM categories");
+$categoryRow = $categoryResult->fetch_assoc();
+$categoryCount = $categoryRow['count'] ?? 0;
+$categoryResult->free();
+
+$supplierResult = $conn->query("SELECT COUNT(*) as count FROM suppliers");
+$supplierRow = $supplierResult->fetch_assoc();
+$supplierCount = $supplierRow['count'] ?? 0;
+$supplierResult->free();
+
+$itemResult = $conn->query("SELECT COUNT(*) as count FROM items");
+$itemRow = $itemResult->fetch_assoc();
+$itemCount = $itemRow['count'] ?? 0;
+$itemResult->free();
+
+$transactionResult = $conn->query("SELECT COUNT(*) as count FROM transactions WHERE DATE(transaction_date) = CURDATE()");
+$transactionRow = $transactionResult->fetch_assoc();
+$todayTransactions = $transactionRow['count'] ?? 0;
+$transactionResult->free();
+
+// Get total asset value and potential revenue
+$assetResult = $conn->query("SELECT SUM(stock_quantity * purchase_price) as total_asset_value FROM items");
+$assetRow = $assetResult->fetch_assoc();
+$totalAssetValue = $assetRow['total_asset_value'] ?? 0;
+$assetResult->free();
+
+$revenueResult = $conn->query("SELECT SUM(stock_quantity * selling_price) as total_potential_revenue FROM items");
+$revenueRow = $revenueResult->fetch_assoc();
+$totalPotentialRevenue = $revenueRow['total_potential_revenue'] ?? 0;
+$revenueResult->free();
+
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,156 +66,102 @@ if (!isset($_SESSION["user_id"])) {
 <body>
     <?php require '../partial/header.php'; ?>
 
-    <div class="container my-5">
+    <!-- Changed to container-fluid for full-width layout -->
+    <div class="container-fluid px-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="font-pixel">Stardew Valley Inventory Dashboard</h1>
-            <div>
-                <a href="../category/index.php" class="btn btn-outline-primary me-2"><span class="nes-btn is-small">Categories</span></a>
-                <a href="../supplier/index.php" class="btn btn-outline-success me-2"><span class="nes-btn is-small">Suppliers</span></a>
-                <a href="../item/index.php" class="btn btn-outline-info me-2"><span class="nes-btn is-small">Items</span></a>
-            </div>
+            <h1 class="font-pixel">Stardew Valley Farm Overview</h1>
         </div>
 
-        <!-- Main Content Card -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <div class="row">
-            <!-- Stats Cards -->
-            <div class="col-md-3 mb-4">
-                <div class="card bg-light border-0 shadow-sm h-100">
-                    <div class="card-body text-center position-relative">
-                        <div class="display-6 font-mono text-primary">
-                            <?php
-                            // Get counts for dashboard stats
-                            require_once '../../public/database.config.php';
-                            $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
-                            $result = $conn->query("SELECT COUNT(*) as count FROM categories");
-                            $row = $result->fetch_assoc();
-                            echo htmlspecialchars($row['count']);
-                            $result->free();
-                            $conn->close();
-                            ?>
+        <!-- Farm Overview Grid -->
+        <div class="row g-3">
+            <!-- Asset Overview Card -->
+            <div class="col-12 col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="nes-container is-small bg-success">🌱</span>
+                            <div>
+                                <h5 class="font-pixel mb-1">Total Farm Value</h5>
+                                <p class="text-muted mb-0">Based on purchase costs</p>
+                            </div>
                         </div>
-                        <div class="font-body text-muted">Categories</div>
-                        <!-- Placeholder for Pierre's sprite -->
-                        <div class="position-absolute top-0 start-50 translate-middle-x mt-2" style="width: 24px; height: 24px; background-color: #28a745; border-radius: 4px;"></div>
+                        <div class="h4 font-mono mb-2">$<?= number_format($totalAssetValue, 2) ?></div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                75% of potential
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card bg-light border-0 shadow-sm h-100">
-                    <div class="card-body text-center position-relative">
-                        <div class="display-6 font-mono text-success">
-                            <?php
-                            require_once '../../public/database.config.php';
-                            $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
-                            $result = $conn->query("SELECT COUNT(*) as count FROM suppliers");
-                            $row = $result->fetch_assoc();
-                            echo htmlspecialchars($row['count']);
-                            $result->free();
-                            $conn->close();
-                            ?>
+            <!-- Revenue Potential Card -->
+            <div class="col-12 col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="nes-container is-small bg-info">💰</span>
+                            <div>
+                                <h5 class="font-pixel mb-1">Revenue Potential</h5>
+                                <p class="text-muted mb-0">Based on selling prices</p>
+                            </div>
                         </div>
-                        <div class="font-body text-muted">Suppliers</div>
-                        <!-- Placeholder for Morris's sprite -->
-                        <div class="position-absolute top-0 start-50 translate-middle-x mt-2" style="width: 24px; height: 24px; background-color: #007bff; border-radius: 4px;"></div>
+                        <div class="h4 font-mono mb-2">$<?= number_format($totalPotentialRevenue, 2) ?></div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                60% margin
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card bg-light border-0 shadow-sm h-100">
-                    <div class="card-body text-center position-relative">
-                        <div class="display-6 font-mono text-warning">
-                            <?php
-                            require_once '../../public/database.config.php';
-                            $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
-                            $result = $conn->query("SELECT COUNT(*) as count FROM items");
-                            $row = $result->fetch_assoc();
-                            echo htmlspecialchars($row['count']);
-                            $result->free();
-                            $conn->close();
-                            ?>
+            <!-- Inventory Diversity Card -->
+            <div class="col-12 col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="nes-container is-small bg-warning">📦</span>
+                            <div>
+                                <h5 class="font-pixel mb-1">Inventory Diversity</h5>
+                                <p class="text-muted mb-0">Unique items in stock</p>
+                            </div>
                         </div>
-                        <div class="font-body text-muted">Inventory Items</div>
-                        <!-- Placeholder for Marnie's sprite -->
-                        <div class="position-absolute top-0 start-50 translate-middle-x mt-2" style="width: 24px; height: 24px; background-color: #ffc107; border-radius: 4px;"></div>
+                        <div class="h4 font-mono mb-2"><?= number_format($itemCount) ?></div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="font-body"><?= $categoryCount ?> Categories</span>
+                            <span class="font-body"><?= $supplierCount ?> Suppliers</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card bg-light border-0 shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="display-6 font-mono text-info">
-                            <?php
-                            require_once '../../public/database.config.php';
-                            $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
-                            $result = $conn->query("SELECT COUNT(*) as count FROM transactions WHERE DATE(transaction_date) = CURDATE()");
-                            $row = $result->fetch_assoc();
-                            echo htmlspecialchars($row['count']);
-                            $result->free();
-                            $conn->close();
-                            ?>
+            <!-- Activity Today Card -->
+            <div class="col-12 col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="nes-container is-small bg-danger">⚡</span>
+                            <div>
+                                <h5 class="font-pixel mb-1">Today's Activity</h5>
+                                <p class="text-muted mb-0">Transactions processed</p>
+                            </div>
                         </div>
-                        <div class="font-body text-muted">Today's Transactions</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="row mt-5">
-            <div class="col-12">
-                <h2 class="font-pixel mb-4">Quick Actions</h2>
-                <div class="row g-4">
-                    <div class="col-md-3">
-                        <a href="../category/form.php" class="card h-100 btn btn-outline-primary d-flex flex-column align-items-center text-center text-decoration-none">
-                            <div class="card-body py-4">
-                                <span class="nes-btn is-small mb-3 d-block">+</span>
-                                <div class="font-pixel">Add Category</div>
-                                <small class="font-body text-muted">Create new item categories</small>
+                        <div class="h4 font-mono mb-2"><?= number_format($todayTransactions) ?></div>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                                40% of daily goal
                             </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="../supplier/form.php" class="card h-100 btn btn-outline-success d-flex flex-column align-items-center text-center text-decoration-none">
-                            <div class="card-body py-4">
-                                <span class="nes-btn is-small mb-3 d-block">+</span>
-                                <div class="font-pixel">Add Supplier</div>
-                                <small class="font-body text-muted">Register new suppliers</small>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="card h-100 btn btn-outline-warning d-flex flex-column align-items-center text-center text-decoration-none">
-                            <div class="card-body py-4">
-                                <span class="nes-btn is-small mb-3 d-block">+</span>
-                                <div class="font-pixel">Add Item</div>
-                                <small class="font-body text-muted">Add inventory items</small>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="card h-100 btn btn-outline-info d-flex flex-column align-items-center text-center text-decoration-none">
-                            <div class="card-body py-4">
-                                <span class="nes-btn is-small mb-3 d-block">+</span>
-                                <div class="font-pixel">Record Transaction</div>
-                                <small class="font-body text-muted">Log stock movements</small>
-                            </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="row mt-5">
-            <div class="col-12">
-                <h2 class="font-pixel mb-4">Recent Activity</h2>
+        <!-- Recent Farm Activity -->
+        <div class="row mb-4">
+            <div class="col-12 col-md-8">
+                <h2 class="font-pixel mb-3">Recent Farm Activity</h2>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
@@ -182,27 +169,72 @@ if (!isset($_SESSION["user_id"])) {
                                 <th class="font-pixel">Time</th>
                                 <th class="font-pixel">Action</th>
                                 <th class="font-pixel">Details</th>
-                                <th class="font-pixel">User</th>
+                                <th class="font-pixel">Actor</tr>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td class="font-mono">Just now</td>
-                                <td><span class="nes-btn is-small bg-success">SEED</span> Suppliers</td>
+                                <td><span class="nes-container is-small bg-success">🌱 SEED</span> Suppliers</td>
                                 <td class="font-body">Pierre's General Store, JojaCorp, Marnie's Ranch</td>
                                 <td class="font-body">System</td>
                             </tr>
                             <tr>
                                 <td class="font-mono">Just now</td>
-                                <td><span class="nes-btn is-small bg-primary">SEED</span> Categories</td>
+                                <td><span class="nes-container is-small bg-primary">🏷️ SEED</span> Categories</td>
                                 <td class="font-body">Seeds & Starts, Artisan Goods, Livestock & Feed, Farm Tools</td>
+                                <td class="font-body">System</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">5 min ago</td>
+                                <td><span class="nes-container is-small bg-warning">📥 ADDED</span> 50x Parsnip Seeds</td>
+                                <td class="font-body">Inventory updated</td>
+                                <td class="font-body">You</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">12 min ago</td>
+                                <td><span class="nes-container is-small bg-info">💰 SALE</span> 5x Goat Cheese</td>
+                                <td class="font-body">Revenue: $12.50</td>
                                 <td class="font-body">System</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+
+            <!-- Quick Farm Actions -->
+            <div class="col-12 col-md-4">
+                <h2 class="font-pixel mb-3">Quick Farm Actions</h2>
+                <div class="d-flex flex-column gap-3">
+                    <a href="../category/form.php" class="card h-100 btn btn-outline-primary d-flex flex-column align-items-center text-center text-decoration-none border-0 shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-center mb-2">
+                                <span class="nes-btn is-small bg-success">+</span>
+                            </div>
+                            <div class="font-pixel">Add Category</div>
+                            <small class="font-body text-muted">Create new item categories</small>
+                        </div>
+                    </a>
+                    <a href="../supplier/form.php" class="card h-100 btn btn-outline-success d-flex flex-column align-items-center text-center text-decoration-none border-0 shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-center mb-2">
+                                <span class="nes-btn is-small bg-success">+</span>
+                            </div>
+                            <div class="font-pixel">Add Supplier</div>
+                            <small class="font-body text-muted">Register new suppliers</small>
+                        </div>
+                    </a>
+                    <a href="../item/form.php" class="card h-100 btn btn-outline-warning d-flex flex-column align-items-center text-center text-decoration-none border-0 shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-center mb-2">
+                                <span class="nes-btn is-small bg-success">+</span>
+                            </div>
+                            <div class="font-pixel">Add Item</div>
+                            <small class="font-body text-muted">Track new inventory</small>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
