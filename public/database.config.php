@@ -19,10 +19,10 @@ class Database {
             }
         }
 
-        $SERVER_NAME = getenv('SERVER_NAME');
-        $USERNAME = getenv('USERNAME');
-        $PASSWORD = getenv('PASSWORD');
-        $DB_NAME = getenv('DB_NAME');
+        $SERVER_NAME = getenv('SERVER_NAME') ?: ($_ENV['SERVER_NAME'] ?? 'localhost');
+        $USERNAME    = getenv('USERNAME') ?: ($_ENV['USERNAME'] ?? 'root');
+        $PASSWORD    = getenv('PASSWORD') ?: ($_ENV['PASSWORD'] ?? '');
+        $DB_NAME     = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'railway');
 
         try {
             $this->conn = new PDO("mysql:host=$SERVER_NAME;dbname=$DB_NAME;charset=utf8mb4", $USERNAME, $PASSWORD, [
