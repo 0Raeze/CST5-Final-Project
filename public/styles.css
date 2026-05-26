@@ -15,10 +15,25 @@ html {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: var(--font-body-family, 'Plus Jakarta Sans', sans-serif);
   line-height: 1.6;
-  background-color: #f5f7fa;
-  color: #333;
+  background-color: var(--bg-primary);
+  color: var(--accent-primary);
+}
+
+/* Update heading sizes for pixel fonts to look crisp */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+}
+
+/* Make pixel font headings larger for crisp appearance */
+.font-pixel {
+  font-size: 1.25rem; /* 20px base */
+}
+
+/* Even larger for main titles */
+h1.font-pixel, h2.font-pixel {
+  font-size: 1.5rem; /* 24px */
 }
 
 /* =========================
@@ -36,7 +51,24 @@ body {
   --white: #ffffff;
   --border: #e5e7eb;
   --text: #333;
+
+  /* Stardew Valley Theme Colors */
+  --bg-primary: #FDF6E2; /* Warm cream/parchment */
+  --accent-primary: #4A2E1B; /* Rich chestnut brown */
+  --accent-secondary: #8B4513; /* Saddle brown */
+  --accent-light: #D2B48C; /* Tan */
 }
+
+/* Font Family Rules */
+.font-pixel {
+    font-family: 'VT323', monospace;
+    image-rendering: pixelated;
+    font-smooth: never;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: none;
+}
+.font-body { font-family: 'Plus Jakarta Sans', sans-serif; }
+.font-mono { font-family: 'Courier Prime', monospace; }
 
 /* =========================
    TYPOGRAPHY
