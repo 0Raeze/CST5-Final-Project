@@ -3,7 +3,7 @@ require_once '../../controllers/category.php';
 require_once '../../public/database.config.php';
 
 // Initialize controller
-$controller = new CategoryController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+$conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME, $DB_PORT);
 
 // Handle form submissions
 $message = "";

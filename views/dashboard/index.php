@@ -9,7 +9,13 @@ if (!isset($_SESSION["user_id"])) {
 
 // Get dashboard stats
 require_once '../../public/database.config.php';
-$conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+$host     = getenv('SERVER_NAME') ?: ($_ENV['SERVER_NAME'] ?? 'mysql.railway.internal');
+$user     = getenv('USERNAME') ?: ($_ENV['USERNAME'] ?? 'root');
+$pass     = getenv('PASSWORD') ?: ($_ENV['PASSWORD'] ?? '');
+$dbname   = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'railway');
+$db_port  = getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? 3306);
+
+$conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME, $DB_PORT);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }

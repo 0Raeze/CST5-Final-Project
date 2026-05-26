@@ -4,7 +4,7 @@
     <h1 class="font-pixel text-center mb-4">Reports & Analytics</h1>
     <?php
     require_once 'public/database.config.php';
-    $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+    $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME, $DB_PORT);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }

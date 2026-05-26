@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["reset_system"])) {
     require_once 'controllers/supplier.php';
     require_once 'controllers/item.php';
 
-    $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+    $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME, $DB_PORT);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }

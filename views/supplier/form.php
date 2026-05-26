@@ -3,7 +3,7 @@ require_once '../../controllers/supplier.php';
 require_once '../../public/database.config.php';
 
 // Initialize controller
-$controller = new SupplierController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+$conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME, $DB_PORT);
 
 // Determine if we are editing or adding
 $isEdit = false;
