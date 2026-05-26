@@ -1,3 +1,18 @@
 .env
 node_modules/
 .DS_Store
+
+# --- AI & Tooling Artifacts ---
+.claude/
+claude-code-*
+.claude-code/
+.claudecode*
+.git/worktrees/
+
+# --- Local Environment & Server Data ---
+.env
+config.local.php
+*.log
+laragon/
+.idea/
+.vscode/
