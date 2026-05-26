@@ -1,21 +1,21 @@
 <?php
+// 1. Keep your session and login check at the very top
 session_start();
-
-// Check if user is logged in (basic check)
 if (!isset($_SESSION["user_id"])) {
     header("Location: /index.php");
     exit();
 }
 
-// Get dashboard stats
-require_once '../../public/database.config.php';
+// 2. Clear out the old config require and grab the environment variables DIRECTLY on this page
 $host     = getenv('SERVER_NAME') ?: ($_ENV['SERVER_NAME'] ?? 'mysql.railway.internal');
 $user     = getenv('USERNAME') ?: ($_ENV['USERNAME'] ?? 'root');
 $pass     = getenv('PASSWORD') ?: ($_ENV['PASSWORD'] ?? '');
 $dbname   = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'railway');
 $db_port  = getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? 3306);
 
-$conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME, $DB_PORT);
+// 3. Connect to the database explicitly using these exact variables
+$conn = new mysqli($host, $user, $pass, $dbname, $db_port);
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
