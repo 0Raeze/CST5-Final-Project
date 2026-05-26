@@ -6,13 +6,14 @@ class AccountController {
     // Properties
     private $conn;
 
-    function __construct($server_name, $username, $password, $db_name, $db_port)
+    function __construct($host = 'mysql.railway.internal', $user = 'root', $pass = '', $dbname = 'railway', $db_port = 3306)
     {
         $this->conn = new mysqli(
-            $server_name,
-            $username,
-            $password,
-            $db_name
+            $host,
+            $user,
+            $pass,
+            $dbname,
+            $db_port
         );
 
         // Check connection
