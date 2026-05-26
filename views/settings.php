@@ -32,7 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["reset_system"])) {
     require_once 'controllers/supplier.php';
     require_once 'controllers/item.php';
 
-    $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME, $DB_PORT);
+    $host     = getenv('SERVER_NAME') ?: ($_ENV['SERVER_NAME'] ?? 'mysql.railway.internal');
+    $user     = getenv('USERNAME') ?: ($_ENV['USERNAME'] ?? 'root');
+    $pass     = getenv('PASSWORD') ?: ($_ENV['PASSWORD'] ?? '');
+    $dbname   = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'railway');
+    $db_port  = getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? 3306);
+
+    $conn = new mysqli($host, $user, $pass, $dbname, $db_port);
+
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
