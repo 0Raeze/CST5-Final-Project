@@ -9,6 +9,11 @@ require_once __DIR__ . '/models/account.php';
 require_once __DIR__ . '/controllers/account.php';
 require_once __DIR__ . '/public/database.config.php';
 
+$SERVER_NAME = getenv('SERVER_NAME') ?: ($_ENV['SERVER_NAME'] ?? 'localhost');
+$USERNAME    = getenv('USERNAME') ?: ($_ENV['USERNAME'] ?? 'root');
+$PASSWORD    = getenv('PASSWORD') ?: ($_ENV['PASSWORD'] ?? '');
+$DB_NAME     = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'railway');
+
 // Dummy credentials (replace with database later)
 $valid_user = "admin";
 $valid_pass = "123456";
