@@ -14,6 +14,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// THE MISSING LINK: Instantiate the controller so the page can use it!
+$controller = new CategoryController($host, $user, $pass, $dbname, $db_port);
+
 // Handle form submissions
 $message = "";
 $messageType = "";

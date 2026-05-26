@@ -1,11 +1,21 @@
 <?php
-require_once '../../controllers/item.php';
 require_once '../../controllers/category.php';
 require_once '../../public/database.config.php';
 
-// Initialize controllers
-$itemController = new ItemController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
-$categoryController = new CategoryController($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+$host     = getenv('SERVER_NAME') ?: ($_ENV['SERVER_NAME'] ?? 'mysql.railway.internal');
+$user     = getenv('USERNAME') ?: ($_ENV['USERNAME'] ?? 'root');
+$pass     = getenv('PASSWORD') ?: ($_ENV['PASSWORD'] ?? '');
+$dbname   = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'railway');
+$db_port  = getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? 3306);
+
+$conn = new mysqli($host, $user, $pass, $dbname, $db_port);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// THE MISSING LINK: Instantiate the controller so the page can use it!
+$controller = new CategoryController($host, $user, $pass, $dbname, $db_port);
 
 // Handle form submissions
 $message = "";
@@ -14,36 +24,29 @@ $messageType = "";
 // Process delete action
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     $id = intval($_GET['delete']);
-    if ($itemController->delete($id)) {
-        $message = "Item deleted successfully";
+    if ($controller->delete($id)) {
+        $message = "Category deleted successfully";
         $messageType = "success";
     } else {
-        $message = "Failed to delete item";
+        $message = "Cannot delete category - it may have items associated with it";
         $messageType = "danger";
     }
 }
 
 // Process seeding action (for initial setup)
 if (isset($_GET['seed'])) {
-    $seeded = $itemController->seedInitialItems();
+    $seeded = $controller->seedInitialCategories();
     if ($seeded > 0) {
-        $message = "Seeded $seeded initial items";
+        $message = "Seeded $seeded initial categories";
         $messageType = "success";
     } else {
-        $message = "No new items to seed (all already exist)";
+        $message = "No new categories to seed (all already exist)";
         $messageType = "info";
     }
 }
 
-// Get filter parameters
-$searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
-$categoryFilter = isset($_GET['category']) && is_numeric($_GET['category']) ? intval($_GET['category']) : 0;
-
-// Get all categories for filter dropdown
-$categories = $categoryController->readAll();
-
-// Get all items with filters
-$items = $itemController->readAll($searchTerm, $categoryFilter);
+// Get all categories for display
+$categories = $controller->readAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
