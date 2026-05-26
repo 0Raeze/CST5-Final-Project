@@ -79,7 +79,7 @@ $conn->close();
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="nes-container is-small bg-success">🌱</span>
+                            <div style="border: 4px solid black; padding: 4px; background-color: #4caf50; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; image-rendering: pixelated;">🌱</div>
                             <div>
                                 <h5 class="font-pixel mb-1">Total Farm Value</h5>
                                 <p class="text-muted mb-0">Based on purchase costs</p>
@@ -100,7 +100,7 @@ $conn->close();
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="nes-container is-small bg-info">💰</span>
+                            <div style="border: 4px solid black; padding: 4px; background-color: #2196f3; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; image-rendering: pixelated;">💰</div>
                             <div>
                                 <h5 class="font-pixel mb-1">Revenue Potential</h5>
                                 <p class="text-muted mb-0">Based on selling prices</p>
@@ -121,7 +121,7 @@ $conn->close();
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="nes-container is-small bg-warning">📦</span>
+                            <div style="border: 4px solid black; padding: 4px; background-color: #ff9800; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; image-rendering: pixelated;">📦</div>
                             <div>
                                 <h5 class="font-pixel mb-1">Inventory Diversity</h5>
                                 <p class="text-muted mb-0">Unique items in stock</p>
@@ -141,7 +141,7 @@ $conn->close();
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="nes-container is-small bg-danger">⚡</span>
+                            <div style="border: 4px solid black; padding: 4px; background-color: #f44336; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; image-rendering: pixelated;">⚡</div>
                             <div>
                                 <h5 class="font-pixel mb-1">Today's Activity</h5>
                                 <p class="text-muted mb-0">Transactions processed</p>
@@ -209,7 +209,7 @@ $conn->close();
                     <a href="../category/form.php" class="card h-100 btn btn-outline-primary d-flex flex-column align-items-center text-center text-decoration-none border-0 shadow-sm">
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-center mb-2">
-                                <span class="nes-btn is-small bg-success">+</span>
+                                <span class="nes-container is-small bg-success">+</span>
                             </div>
                             <div class="font-pixel">Add Category</div>
                             <small class="font-body text-muted">Create new item categories</small>
@@ -218,7 +218,7 @@ $conn->close();
                     <a href="../supplier/form.php" class="card h-100 btn btn-outline-success d-flex flex-column align-items-center text-center text-decoration-none border-0 shadow-sm">
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-center mb-2">
-                                <span class="nes-btn is-small bg-success">+</span>
+                                <span class="nes-container is-small bg-success">+</span>
                             </div>
                             <div class="font-pixel">Add Supplier</div>
                             <small class="font-body text-muted">Register new suppliers</small>
@@ -227,7 +227,7 @@ $conn->close();
                     <a href="../item/form.php" class="card h-100 btn btn-outline-warning d-flex flex-column align-items-center text-center text-decoration-none border-0 shadow-sm">
                         <div class="card-body p-3">
                             <div class="d-flex justify-content-center mb-2">
-                                <span class="nes-btn is-small bg-success">+</span>
+                                <span class="nes-container is-small bg-success">+</span>
                             </div>
                             <div class="font-pixel">Add Item</div>
                             <small class="font-body text-muted">Track new inventory</small>
